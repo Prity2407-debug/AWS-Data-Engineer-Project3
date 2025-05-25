@@ -15,5 +15,5 @@ LOCATION
   's3://parent-datalake/machine_learning_curated/'
 TBLPROPERTIES (
   'CreatedByJob'='machine_learning_curated_glue_job', 
-  'CreatedByJobRun'='jr_314c45bd1c30e235ea16f93cbe64d6d62b269fc9f163b642345ef045d1b86417', 
+  'CreatedByJobRun'='jr_3deb31c2f872e09416e940d88ee5378c0deab105df0c9616499820b1596031c4', 
   'classification'='json')

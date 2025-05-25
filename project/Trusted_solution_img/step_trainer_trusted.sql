@@ -1,6 +1,6 @@
 CREATE EXTERNAL TABLE `step_trainer_trusted`(
-  `sensorreadingtime` bigint COMMENT 'from deserializer', 
   `serialnumber` string COMMENT 'from deserializer', 
+  `sensorreadingtime` bigint COMMENT 'from deserializer', 
   `distancefromobject` int COMMENT 'from deserializer')
 ROW FORMAT SERDE 
   'org.openx.data.jsonserde.JsonSerDe' 
@@ -12,5 +12,5 @@ LOCATION
   's3://parent-datalake/step_trainer/trusted/'
 TBLPROPERTIES (
   'CreatedByJob'='step_trainer_trusted_glue_job', 
-  'CreatedByJobRun'='jr_d26bcec3767cfe9a501ac9546b34334bc0eb2a364609429a67485a92a98b912b', 
+  'CreatedByJobRun'='jr_85593595359a40653f908057601bfe2426e1a7fe074fd0021186d66ad9fce4fa', 
   'classification'='json')

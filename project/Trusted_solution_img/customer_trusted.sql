@@ -19,5 +19,5 @@ LOCATION
   's3://parent-datalake/customer/trusted/'
 TBLPROPERTIES (
   'CreatedByJob'='customer_trusted_glue_job', 
-  'CreatedByJobRun'='jr_98e3f5b7b1fc1b971354f922a43110c7102dd53cc29b0c98f3e1adafe7af4a2f', 
+  'CreatedByJobRun'='jr_f5bbd9033e65a87f915d00bd6af4a79ca31c72d20e08f2bca5f8f77c00e66c33', 
   'classification'='json')

@@ -27,14 +27,14 @@ DEFAULT_DATA_QUALITY_RULESET = """
 """
 
 # Script generated for node Customer_Landing
-Customer_Landing_node1747967685701 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="customer_landing", transformation_ctx="Customer_Landing_node1747967685701")
+Customer_Landing_node1747967685701 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="customer_landinglanding", transformation_ctx="Customer_Landing_node1747967685701")
 
 # Script generated for node Privacy Filter
-SqlQuery577 = '''
+SqlQuery624 = '''
 select * from myDataSource where shareWithResearchAsOfDate is not null;
 
 '''
-PrivacyFilter_node1747967737045 = sparkSqlQuery(glueContext, query = SqlQuery577, mapping = {"myDataSource":Customer_Landing_node1747967685701}, transformation_ctx = "PrivacyFilter_node1747967737045")
+PrivacyFilter_node1747967737045 = sparkSqlQuery(glueContext, query = SqlQuery624, mapping = {"myDataSource":Customer_Landing_node1747967685701}, transformation_ctx = "PrivacyFilter_node1747967737045")
 
 # Script generated for node Customer_Trusted
 EvaluateDataQuality().process_rows(frame=PrivacyFilter_node1747967737045, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1747967341459", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})

@@ -27,18 +27,22 @@ DEFAULT_DATA_QUALITY_RULESET = """
 """
 
 # Script generated for node Step_trainer_landing
-Step_trainer_landing_node1748043895523 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="step_trainer_landing", transformation_ctx="Step_trainer_landing_node1748043895523")
+Step_trainer_landing_node1748043895523 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="step_trainer_landinglanding", transformation_ctx="Step_trainer_landing_node1748043895523")
 
 # Script generated for node Customer_curated
 Customer_curated_node1748043875256 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="customer_curated", transformation_ctx="Customer_curated_node1748043875256")
 
 # Script generated for node SQL Query
-SqlQuery444 = '''
-select distinct myDataSource1.* from myDataSource1 
-inner join myDataSource2
-on myDataSource2.serialNumber = myDataSource1.serialNumber;
+SqlQuery598 = '''
+SELECT 
+  myDataSource1.serialNumber,
+  myDataSource1.sensorReadingTime,
+  myDataSource1.distanceFromObject
+FROM myDataSource1
+JOIN myDataSource2
+  ON myDataSource1.serialNumber = myDataSource2.serialNumber
 '''
-SQLQuery_node1748045384308 = sparkSqlQuery(glueContext, query = SqlQuery444, mapping = {"myDataSource1":Step_trainer_landing_node1748043895523, "myDataSource2":Customer_curated_node1748043875256}, transformation_ctx = "SQLQuery_node1748045384308")
+SQLQuery_node1748045384308 = sparkSqlQuery(glueContext, query = SqlQuery598, mapping = {"myDataSource1":Step_trainer_landing_node1748043895523, "myDataSource2":Customer_curated_node1748043875256}, transformation_ctx = "SQLQuery_node1748045384308")
 
 # Script generated for node step_trainer_trusted
 EvaluateDataQuality().process_rows(frame=SQLQuery_node1748045384308, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1748045036751", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})

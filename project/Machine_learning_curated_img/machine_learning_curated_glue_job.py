@@ -33,14 +33,14 @@ accelerometer_trusted_node1748053519554 = glueContext.create_dynamic_frame.from_
 step_trainer_trusted_node1748055262716 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="step_trainer_trusted", transformation_ctx="step_trainer_trusted_node1748055262716")
 
 # Script generated for node SQL Query
-SqlQuery489 = '''
+SqlQuery556 = '''
 select accelerometer_trusted.user, accelerometer_trusted.timestamp, accelerometer_trusted.x, 
 accelerometer_trusted.y, accelerometer_trusted.z,step_trainer_trusted.distanceFromObject
 from step_trainer_trusted
 INNER JOIN accelerometer_trusted
 ON accelerometer_trusted.timestamp=step_trainer_trusted.sensorReadingTime;
 '''
-SQLQuery_node1748055347301 = sparkSqlQuery(glueContext, query = SqlQuery489, mapping = {"step_trainer_trusted":step_trainer_trusted_node1748055262716, "accelerometer_trusted":accelerometer_trusted_node1748053519554}, transformation_ctx = "SQLQuery_node1748055347301")
+SQLQuery_node1748055347301 = sparkSqlQuery(glueContext, query = SqlQuery556, mapping = {"step_trainer_trusted":step_trainer_trusted_node1748055262716, "accelerometer_trusted":accelerometer_trusted_node1748053519554}, transformation_ctx = "SQLQuery_node1748055347301")
 
 # Script generated for node machine_learning_curated
 EvaluateDataQuality().process_rows(frame=SQLQuery_node1748055347301, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1748052665957", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})

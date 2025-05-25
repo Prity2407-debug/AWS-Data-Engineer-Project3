@@ -14,5 +14,5 @@ LOCATION
   's3://parent-datalake/accelerometer/trusted/'
 TBLPROPERTIES (
   'CreatedByJob'='accelerometer_trusted_glue_job-copy', 
-  'CreatedByJobRun'='jr_355a2ffdf274b61fb6d950a0d32c5b4917270bb2bf74c9d2e39cc6faec6600e7', 
+  'CreatedByJobRun'='jr_5b7afe0b144d50233952cd03abdb89d2e39e80911253ef2bb552792cff2f257b', 
   'classification'='json')

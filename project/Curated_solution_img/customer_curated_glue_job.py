@@ -5,9 +5,7 @@ from pyspark.context import SparkContext
 from awsglue.context import GlueContext
 from awsglue.job import Job
 from awsgluedq.transforms import EvaluateDataQuality
-from awsglue.dynamicframe import DynamicFrame
 from awsglue import DynamicFrame
-from pyspark.sql import functions as SqlFuncs
 
 def sparkSqlQuery(glueContext, query, mapping, transformation_ctx) -> DynamicFrame:
     for alias, frame in mapping.items():
@@ -31,30 +29,34 @@ DEFAULT_DATA_QUALITY_RULESET = """
 # Script generated for node Customer_trusted
 Customer_trusted_node1747967685701 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="customer_trusted", transformation_ctx="Customer_trusted_node1747967685701")
 
-# Script generated for node Accelerometer_Landing
-Accelerometer_Landing_node1747968715545 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="accelerometer_landing", transformation_ctx="Accelerometer_Landing_node1747968715545")
+# Script generated for node Accelerometer_trusted
+Accelerometer_trusted_node1747968715545 = glueContext.create_dynamic_frame.from_catalog(database="stedi_db", table_name="accelerometer_trusted", transformation_ctx="Accelerometer_trusted_node1747968715545")
 
 # Script generated for node SQL Query
-SqlQuery493 = '''
-SELECT DISTINCT *
-FROM myDataSource1 c
-JOIN myDataSource2 a
-  ON c.email = a.user
-WHERE c.shareWithResearchAsOfDate IS NOT NULL
-  AND a.timestamp >= c.shareWithResearchAsOfDate;
+SqlQuery539 = '''
+SELECT DISTINCT 
+  myDataSource1.customerName,
+  myDataSource1.email,
+  myDataSource1.phone,
+  myDataSource1.birthDay,
+  myDataSource1.serialNumber,
+  myDataSource1.registrationDate,
+  myDataSource1.lastUpdateDate,
+  myDataSource1.shareWithResearchAsOfDate,
+  myDataSource1.shareWithPublicAsOfDate,
+  myDataSource1.shareWithFriendsAsOfDate
+FROM myDataSource1
+JOIN myDataSource2
+  ON myDataSource1.email = myDataSource2.user
+WHERE myDataSource1.shareWithResearchAsOfDate IS NOT NULL
+  AND myDataSource2.timestamp >= myDataSource1.shareWithResearchAsOfDate;
 '''
-SQLQuery_node1747970405098 = sparkSqlQuery(glueContext, query = SqlQuery493, mapping = {"myDataSource1":Customer_trusted_node1747967685701, "myDataSource2":Accelerometer_Landing_node1747968715545}, transformation_ctx = "SQLQuery_node1747970405098")
-
-# Script generated for node Drop Duplicates
-DropDuplicates_node1747972234941 =  DynamicFrame.fromDF(SQLQuery_node1747970405098.toDF().dropDuplicates(["serialNumber"]), glueContext, "DropDuplicates_node1747972234941")
-
-# Script generated for node Drop Fields
-DropFields_node1747972248359 = DropFields.apply(frame=DropDuplicates_node1747972234941, paths=["user", "timestamp", "x", "y", "z"], transformation_ctx="DropFields_node1747972248359")
+SQLQuery_node1747970405098 = sparkSqlQuery(glueContext, query = SqlQuery539, mapping = {"myDataSource1":Customer_trusted_node1747967685701, "myDataSource2":Accelerometer_trusted_node1747968715545}, transformation_ctx = "SQLQuery_node1747970405098")
 
 # Script generated for node Amazon S3
-EvaluateDataQuality().process_rows(frame=DropFields_node1747972248359, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1747967341459", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})
+EvaluateDataQuality().process_rows(frame=SQLQuery_node1747970405098, ruleset=DEFAULT_DATA_QUALITY_RULESET, publishing_options={"dataQualityEvaluationContext": "EvaluateDataQuality_node1747967341459", "enableDataQualityResultsPublishing": True}, additional_options={"dataQualityResultsPublishing.strategy": "BEST_EFFORT", "observations.scope": "ALL"})
 AmazonS3_node1747972261425 = glueContext.getSink(path="s3://parent-datalake/customer/curated/", connection_type="s3", updateBehavior="UPDATE_IN_DATABASE", partitionKeys=[], enableUpdateCatalog=True, transformation_ctx="AmazonS3_node1747972261425")
 AmazonS3_node1747972261425.setCatalogInfo(catalogDatabase="stedi_db",catalogTableName="customer_curated")
 AmazonS3_node1747972261425.setFormat("json")
-AmazonS3_node1747972261425.writeFrame(DropFields_node1747972248359)
+AmazonS3_node1747972261425.writeFrame(SQLQuery_node1747970405098)
 job.commit()
